@@ -1,2 +1,5 @@
+os
+io
+subprocess
 discord.py
 python-dotenv
