@@ -22,6 +22,19 @@ async def on_ready():
     await bot.tree.sync()
     print(f"Bot loaded, {bot.user.name}")
 
+@bot.tree.command(name="dependencies", description="Install all required dependencies to run the program.")
+async def dependencies(interaction: discord.Interaction):
+    await interaction.response.defer(ephemeral=True)
+    try:
+        dependencies_result = subprocess.run("sudo -n apt update && sudo -n apt install -y nmap golang && go install github.com/lc/gau/v2/cmd/gau@latest",shell=True)
+        if dependencies_result.returncode != 0:
+            await interaction.followup.send("[ERROR]: Error installing dependencies.")
+        else:
+            await interaction.followup.send("[ALERT]: dependencies intalled.")
+
+    except FileNotFoundError:
+        await interaction.followup.send("Error: Make sure the bot is running on a linux distro.")      
+
 @bot.tree.command(name="nmap", description="Run: nmap -sV")
 async def nmap(interaction: discord.Interaction, target:str):
     await interaction.response.defer(ephemeral=True)
