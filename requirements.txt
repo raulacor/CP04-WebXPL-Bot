@@ -3,3 +3,4 @@ io
 subprocess
 discord.py
 python-dotenv
+requests
