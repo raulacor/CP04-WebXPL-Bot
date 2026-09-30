@@ -23,10 +23,10 @@ async def on_ready():
     print(f"Bot loaded, {bot.user.name}")
 
 @bot.tree.command(name="nmap", description="Run: nmap -sV")
-async def nmap(interaction: discord.Interaction, msg:str):
+async def nmap(interaction: discord.Interaction, target:str):
     await interaction.response.defer(ephemeral=True)
     try:
-        nmap_result = subprocess.run(["nmap", "-sV", "--version-light", "--script=banner", msg], capture_output=True, text=True)
+        nmap_result = subprocess.run(["nmap", "-sV", "--version-light", "--script=banner", target], capture_output=True, text=True)
         if nmap_result.returncode != 0:
             await interaction.followup.send("Error: target unavailable")
         else:
@@ -36,6 +36,21 @@ async def nmap(interaction: discord.Interaction, msg:str):
 
     except FileNotFoundError:
         await interaction.followup.send("Error: nmap unavailable")
+
+@bot.tree.command(name="gau", description="Gather endpoints passively using GetAllURL")
+async def gau(interaction: discord.Interaction, domain:str):
+    await interaction.response.defer(ephemeral=True)
+    try:
+        gau_result = subprocess.run(["gau", domain], capture_output=True, text=True)
+        if gau_result.returncode != 0:
+            await interaction.followup.send("Error: target unavailable")
+        else:
+            gau_buffer = io.BytesIO(gau_result.stdout.encode('utf-8'))
+            gau_file = discord.File(fp=gau_buffer, filename="gau.txt")
+            await interaction.followup.send(file=gau_file)
+
+    except FileNotFoundError:
+        await interaction.followup.send("Error: GetAllURL unavailable")
 
 
 bot.run(token)
