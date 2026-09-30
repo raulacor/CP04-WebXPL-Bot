@@ -1,4 +1,4 @@
-# CP04-Web-XPL-Bot
+# Black Hands the Bot
 
 A Discord bot that brings offensive reconnaissance tooling into your server. It exposes common recon tools as slash commands, returning results as clean file attachments or embedded cards.
 
